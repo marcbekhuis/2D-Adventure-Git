@@ -58,13 +58,45 @@ public class InputManager : MonoBehaviour
         }
     }
 
+    [System.Serializable]
+    class AxisInput
+    {
+        [System.Serializable]
+        public class AxisEvent : UnityEvent<float>
+        {
+
+        }
+
+
+        public string actionName = "New Action";
+        [Space]
+        public string[] axisNames;
+        [Space]
+        public AxisEvent functionsToCall;
+
+        public void CheckForInput()
+        {
+            foreach (var axisName in axisNames)
+            {
+                functionsToCall.Invoke(Input.GetAxis(axisName));
+            }
+        }
+    }
+
     [SerializeField] private KeyInput[] keyInputs;
+    [Space]
+    [SerializeField] private AxisInput[] axisInputs;
 
     void Update()
     {
         foreach (var keyInput in keyInputs)
         {
             keyInput.CheckForInput();
+        }
+
+        foreach (var axisInput in axisInputs)
+        {
+            axisInput.CheckForInput();
         }
     }
 }
