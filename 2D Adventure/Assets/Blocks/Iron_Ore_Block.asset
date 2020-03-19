@@ -15,5 +15,6 @@ MonoBehaviour:
   blockName: Iron Ore Block
   tileVariants:
   - {fileID: 11400000, guid: 36c62e9d86d3fb34eaacd2aa9a5723fc, type: 2}
+  blockBreakTool: 2
   spawnsBelowY: 900
   spawnChange: 10

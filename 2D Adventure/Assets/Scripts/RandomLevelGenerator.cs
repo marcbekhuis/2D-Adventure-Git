@@ -14,11 +14,16 @@ public class RandomLevelGenerator : MonoBehaviour
     [SerializeField] private PrefabBlockData stoneBlock;
     [SerializeField] private PrefabBlockData[] oreBlocks;
 
-    private int height = 1000;
+    private int height1 = 1000;
+    private int height2;
+    private int height3;
 
     // Start is called before the first frame update
     void Start()
     {
+        height2 = height1;
+        height3 = height2;
+
         for (int i = 4700; i < 5300; i++)
         {
             GenerateHeight();
@@ -33,7 +38,7 @@ public class RandomLevelGenerator : MonoBehaviour
 
     private void GenerateXPillar(int x)
     {
-        for (int y = height; y > 0; y--)
+        for (int y = height2; y > 0; y--)
         {
             Vector3Int position = new Vector3Int(x, y, 0);
             PlaceTile(position);
@@ -42,23 +47,29 @@ public class RandomLevelGenerator : MonoBehaviour
 
     private void GenerateHeight()
     {
-        height = Mathf.Clamp(height + Random.Range(-1, 2), 0, 2000);
+        height1 = height2;
+        height2 = height3;
+        height3 = Mathf.Clamp(height3 + Random.Range(-1, 2), 0, 2000);
+        if (height1 == height3)
+        {
+            height2 = height1;
+        }
     }
 
     private void PlaceTile(Vector3Int position)
     {
-        if (position.y == height)
+        if (position.y == height2)
         {
             Tile tile = grassBlock.tileVariants[0];
             foregroundTilemap.SetTile(position, tile);
-            placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, grassBlock.name);
+            placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, grassBlock.blockBreakTool, grassBlock.name);
             return;
         }
-        else if (position.y < height && position.y > height - 5)
+        else if (position.y < height2 && position.y > height2 - 5)
         {
             Tile tile = dirtBlock.tileVariants[0];
             foregroundTilemap.SetTile(position, tile);
-            placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, dirtBlock.name);
+            placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, dirtBlock.blockBreakTool, dirtBlock.name);
             return;
         }
         else
@@ -72,14 +83,14 @@ public class RandomLevelGenerator : MonoBehaviour
                     {
                         tile = oreBlock.tileVariants[0];
                         foregroundTilemap.SetTile(position, tile);
-                        placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, oreBlock.name);
+                        placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, oreBlock.blockBreakTool, oreBlock.name);
                         return;
                     }
                 }
             }
             tile = stoneBlock.tileVariants[0];
             foregroundTilemap.SetTile(position, tile);
-            placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, stoneBlock.name);
+            placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, stoneBlock.blockBreakTool, stoneBlock.name);
         }
     }
 }
