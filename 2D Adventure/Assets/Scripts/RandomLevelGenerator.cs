@@ -8,6 +8,7 @@ public class RandomLevelGenerator : MonoBehaviour
 
     [SerializeField] private Tilemap foregroundTilemap;
     [SerializeField] private PlacedBlocksData placedBlocksData;
+    [SerializeField] private BlockPlacementSystem blockPlacementSystem;
     [Space]
     [SerializeField] private PrefabBlockData grassBlock;
     [SerializeField] private PrefabBlockData dirtBlock;
@@ -29,6 +30,7 @@ public class RandomLevelGenerator : MonoBehaviour
             GenerateHeight();
             GenerateXPillar(i);
         }
+        blockPlacementSystem.PlaceTiles(placedBlocksData.PlacedBlocks);
     }
 
     // Update is called once per frame
@@ -61,14 +63,12 @@ public class RandomLevelGenerator : MonoBehaviour
         if (position.y == height2)
         {
             Tile tile = grassBlock.tileVariants[0];
-            foregroundTilemap.SetTile(position, tile);
             placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, grassBlock.blockBreakTool, grassBlock.name);
             return;
         }
         else if (position.y < height2 && position.y > height2 - 5)
         {
             Tile tile = dirtBlock.tileVariants[0];
-            foregroundTilemap.SetTile(position, tile);
             placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, dirtBlock.blockBreakTool, dirtBlock.name);
             return;
         }
@@ -82,14 +82,12 @@ public class RandomLevelGenerator : MonoBehaviour
                     if (Random.Range(0, 1000) < oreBlock.spawnChange * 10)
                     {
                         tile = oreBlock.tileVariants[0];
-                        foregroundTilemap.SetTile(position, tile);
                         placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, oreBlock.blockBreakTool, oreBlock.name);
                         return;
                     }
                 }
             }
             tile = stoneBlock.tileVariants[0];
-            foregroundTilemap.SetTile(position, tile);
             placedBlocksData.PlacedBlocks[position.x, position.y] = new PlacedBlockData(foregroundTilemap, tile, position, stoneBlock.blockBreakTool, stoneBlock.name);
         }
     }
