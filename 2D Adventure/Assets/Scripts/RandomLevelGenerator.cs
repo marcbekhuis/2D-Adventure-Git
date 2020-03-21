@@ -25,12 +25,13 @@ public class RandomLevelGenerator : MonoBehaviour
         height2 = height1;
         height3 = height2;
 
-        for (int i = 4700; i < 5300; i++)
+        for (int i = 0; i < 10000; i++)
         {
             GenerateHeight();
             GenerateXPillar(i);
         }
-        blockPlacementSystem.PlaceTiles(placedBlocksData.PlacedBlocks);
+        //Debug.LogError("Done Generating Map");
+        //blockPlacementSystem.PlaceTiles(placedBlocksData.PlacedBlocks);
     }
 
     // Update is called once per frame
